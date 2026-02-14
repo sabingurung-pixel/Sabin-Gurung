@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sabin ❤️ Babe</title>
+<style>
+  :root{
+    --pink:#ff4da6;
+    --hot:#ff2d6f;
+    --dark1:#110018;
+    --dark2:#2b0033;
+    --dark3:#001a33;
+    --ink:#ffffff;
+    --muted: rgba(255,255,255,.88);
+    --glass: rgba(255,255,255,.08);
+    --stroke: rgba(255,255,255,.14);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background: radial-gradient(1200px 900px at 50% 15%, #3a0042 0%, var(--dark1) 32%, var(--dark2) 60%, var(--dark3) 100%);
+    color:var(--ink);
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    overflow:hidden;
+  }
+
+  /* subtle animated background glow */
+  .bgGlow{
+    position:fixed; inset:-40%;
+    background:
+      radial-gradient(circle at 20% 30%, rgba(255,77,166,.18), transparent 35%),
+      radial-gradient(circle at 80% 40%, rgba(111,183,255,.16), transparent 40%),
+      radial-gradient(circle at 50% 80%, rgba(255,45,111,.12), transparent 45%);
+    filter: blur(30px);
+    animation: drift 12s ease-in-out infinite alternate;
+    pointer-events:none;
+  }
+  @keyframes drift{
+    from{ transform: translate3d(-2%, -1%, 0) scale(1.02); }
+    to  { transform: translate3d( 2%,  1%, 0) scale(1.05); }
+  }
+
+  /* 3D stage */
+  .stage{
+    perspective: 1100px;
+    width:min(780px, 94vw);
+    padding: 18px;
+  }
+
+  /* 3D glass card */
+  .card{
+    position:relative;
+    transform-style: preserve-3d;
+    width:100%;
+    padding: 30px 26px 26px;
+    border-radius: 26px;
+    background: linear-gradient(135deg, rgba(255,255,255,.10), rgba(255,255,255,.05));
+    border: 1px solid var(--stroke);
+    box-shadow:
+      0 18px 55px rgba(0,0,0,.45),
+      0 0 0 1px rgba(255,255,255,.05) inset;
+    backdrop-filter: blur(12px);
+    cursor:pointer;
+    user-select:none;
+    transition: transform .25s ease, box-shadow .25s ease;
+  }
+  .card:hover{
+    box-shadow:
+      0 22px 70px rgba(0,0,0,.55),
+      0 0 0 1px rgba(255,255,255,.07) inset;
+  }
+
+  /* 3D highlights */
+  .shine{
+    position:absolute; inset:0;
+    border-radius:26px;
+    background: radial-gradient(600px 320px at var(--mx, 50%) var(--my, 30%), rgba(255,255,255,.16), transparent 55%);
+    opacity:.9;
+    pointer-events:none;
+    transform: translateZ(40px);
+  }
+
+  h1{
+    margin:0 0 14px 0;
+    font-size: clamp(28px, 5vw, 44px);
+    color:var(--pink);
+    letter-spacing:.3px;
+    text-shadow:
+      0 0 18px rgba(255,77,166,.35),
+      0 10px 30px rgba(0,0,0,.35);
+    transform: translateZ(60px);
+  }
+  p{
+    margin:0;
+    font-size: clamp(18px, 3.2vw, 24px);
+    line-height:1.55;
+    color:var(--muted);
+    white-space:pre-line;
+    transform: translateZ(52px);
+  }
+  .hint{
+    margin-top:18px;
+    font-size: 14px;
+    opacity:.78;
+    transform: translateZ(45px);
+  }
+  .btnRow{
+    display:flex;
+    justify-content:center;
+    gap:14px;
+    margin-top:24px;
+    flex-wrap:wrap;
+    cursor:default;
+    transform: translateZ(65px);
+  }
+  button{
+    border:none;
+    padding:12px 20px;
+    font-size:18px;
+    font-weight:800;
+    border-radius:18px;
+    cursor:pointer;
+    color:white;
+    box-shadow: 0 12px 24px rgba(0,0,0,.28);
+    transition: transform .18s ease, filter .18s ease;
+  }
+  button:hover{ transform: scale(1.06); filter: brightness(1.05); }
+  .yes{ background: var(--hot); }
+  .no{ background: #3b4a5a; }
+  .small{ font-size:16px; padding:10px 16px; border-radius:16px; }
+
+  /* floating hearts */
+  .heart{
+    position:fixed;
+    left:50%;
+    top:60%;
+    font-size:20px;
+    opacity:0;
+    transform: translate(-50%,-50%) scale(.8);
+    animation: floatUp 2.1s ease forwards;
+    pointer-events:none;
+    filter: drop-shadow(0 12px 16px rgba(0,0,0,.28));
+  }
+  @keyframes floatUp{
+    0%{ opacity:0; transform: translate(-50%,-50%) scale(.8);}
+    18%{ opacity:.95;}
+    100%{ opacity:0; transform: translate(calc(-50% + var(--dx)), calc(-50% - 240px)) scale(1.45);}
+  }
+
+  /* 3D heart "badge" inside card */
+  .badgeHeart{
+    position:absolute;
+    right:18px;
+    top:18px;
+    width:56px;
+    height:56px;
+    border-radius:18px;
+    display:grid;
+    place-items:center;
+    background: linear-gradient(135deg, rgba(255,45,111,.38), rgba(255,77,166,.14));
+    border: 1px solid rgba(255,255,255,.16);
+    transform: translateZ(70px);
+    box-shadow: 0 10px 26px rgba(0,0,0,.32);
+  }
+  .badgeHeart span{
+    font-size:26px;
+    transform: translateZ(10px);
+    text-shadow: 0 8px 14px rgba(0,0,0,.35);
+  }
+
+  /* small footer */
+  .footer{
+    margin-top: 10px;
+    font-size: 12px;
+    opacity: .55;
+    transform: translateZ(40px);
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .bgGlow{ animation:none; }
+    .heart{ animation:none; }
+    .card{ transition:none; }
+  }
+
+
+  /* Surprise accordion */
+  .surpriseWrap{
+    margin-top: 18px;
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap:16px;
+    transform: translateZ(70px);
+    cursor:default;
+  }
+  .accordion{
+    border-radius:18px;
+    border: 1px solid rgba(255,255,255,.14);
+    background: rgba(255,255,255,.06);
+    overflow:hidden;
+    box-shadow: 0 10px 22px rgba(0,0,0,.18);
+  }
+  .accHead{
+    padding: 14px 16px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    font-weight:800;
+    letter-spacing:.2px;
+    cursor:pointer;
+  }
+  .accHead .left{
+    display:flex; align-items:center; gap:10px;
+    font-size: 16px;
+    color: rgba(255,255,255,.92);
+  }
+  .chev{ opacity:.85; transition: transform .2s ease; }
+  .accBody{
+    max-height:0;
+    overflow:hidden;
+    transition:max-height .32s ease;
+    border-top: 1px solid rgba(255,255,255,.10);
+  }
+  .accBodyInner{
+    padding: 12px 16px 16px;
+    font-size: 16px;
+    line-height:1.55;
+    color: rgba(255,255,255,.85);
+    white-space:pre-line;
+  }
+  .open .accBody{ max-height: 220px; }
+  .open .chev{ transform: rotate(180deg); }
+
+  .locked{
+    opacity:.55;
+    filter: grayscale(.15);
+  }
+  .locked .accHead{ cursor:not-allowed; }
+  .locked .tinyNote{
+    margin-top: 10px;
+    font-size: 13px;
+    opacity: .78;
+    transform: translateZ(60px);
+  }
+
+    .accordion{
+      min-height:120px;
+      display:flex;
+      flex-direction:column;
+      justify-content:flex-start;
+    }
+    .accHead{
+      font-size:14px;
+    }
+    @media(max-width:768px){
+      .surpriseWrap{
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media(max-width:480px){
+      .surpriseWrap{
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    /* Force clean 3x3 layout */
+    .surpriseWrap{
+        display:grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        grid-auto-rows: auto;
+        gap:20px;
+        width:100%;
+        margin-top:20px;
+    }
+
+    /* Make title + notes span full width */
+    .tinyNote{
+        grid-column: 1 / -1;
+        text-align:center;
+        margin-bottom:10px;
+    }
+
+    /* Ensure exactly 3 rows visually */
+    .accordion{
+        min-height:140px;
+    }
+
+    @media(max-width:900px){
+        .surpriseWrap{
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+
+    @media(max-width:700px){
+        .surpriseWrap{
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media(max-width:480px){
+        .surpriseWrap{
+            grid-template-columns: 1fr;
+        }
+    }
+    
+/* --- Compact layout for surprises so notes/counter are visible --- */
+.card.compact{
+  padding: 18px 18px 16px !important;
+}
+.card.compact h1{
+  font-size: clamp(22px, 4.2vw, 34px) !important;
+  margin-bottom: 10px !important;
+}
+.card.compact p{
+  font-size: clamp(16px, 2.8vw, 19px) !important;
+}
+.card.compact .hint{
+  margin-top: 12px !important;
+}
+
+/* Keep the surprise grid a bit smaller and tighter */
+.card.compact .surpriseWrap{
+  gap:14px !important;
+  margin-top: 14px !important;
+}
+.card.compact .tinyNote{
+  font-size: 12px !important;
+  opacity: .85 !important;
+  margin-top: 6px !important;
+}
+
+/* --- Playing-card look --- */
+.playGridNote{
+  grid-column: 1 / -1;
+  text-align:center;
+  font-size: 12px;
+  opacity: .85;
+  margin-bottom: 2px;
+  transform: translateZ(60px);
+}
+
+.playCard{
+  position: relative;
+  height: 150px;
+  border-radius: 18px;
+  transform-style: preserve-3d;
+  cursor: pointer;
+  user-select: none;
+  box-shadow: 0 14px 28px rgba(0,0,0,.24);
+  transition: transform .55s cubic-bezier(.2,.8,.2,1), filter .18s ease, opacity .18s ease;
+}
+.playCard:hover{ filter: brightness(1.05); transform: translateZ(0) scale(1.02) rotateX(0deg) rotateY(0deg); }
+
+.playCard.locked{
+  opacity: .45;
+  filter: grayscale(.15);
+  cursor: not-allowed;
+}
+
+.playCardInner{
+  position:absolute; inset:0;
+  border-radius: 18px;
+  transform-style: preserve-3d;
+  transition: transform .55s cubic-bezier(.2,.8,.2,1);
+}
+.playCard.open .playCardInner{
+  transform: rotateY(180deg);
+}
+
+.playFront, .playBack{
+  position:absolute; inset:0;
+  border-radius:18px;
+  backface-visibility: hidden;
+  overflow:hidden;
+  border: 1px solid rgba(255,255,255,.16);
+}
+
+/* Front = card back design */
+.playFront{
+  background:
+    radial-gradient(600px 260px at 20% 30%, rgba(255,77,166,.22), transparent 55%),
+    radial-gradient(600px 260px at 80% 70%, rgba(111,183,255,.18), transparent 55%),
+    linear-gradient(135deg, rgba(255,255,255,.12), rgba(255,255,255,.06));
+  box-shadow: 0 0 0 1px rgba(255,255,255,.05) inset;
+}
+.playFront::after{
+  content:"";
+  position:absolute; inset:12px;
+  border-radius:14px;
+  border: 1px dashed rgba(255,255,255,.22);
+  opacity:.85;
+}
+.corner{
+  position:absolute;
+  font-weight: 900;
+  letter-spacing: .5px;
+  color: rgba(255,255,255,.92);
+  text-shadow: 0 10px 22px rgba(0,0,0,.35);
+  transform: translateZ(20px);
+}
+.corner.top{ left:12px; top:10px; font-size:14px; }
+.corner.bot{ right:12px; bottom:10px; font-size:14px; transform: rotate(180deg) translateZ(20px); }
+
+.centerIcon{
+  position:absolute;
+  left:50%; top:50%;
+  transform: translate(-50%,-50%) translateZ(30px);
+  font-size: 44px;
+  filter: drop-shadow(0 10px 14px rgba(0,0,0,.35));
+}
+.ribbon{
+  position:absolute;
+  left:50%;
+  bottom: 14px;
+  transform: translateX(-50%) translateZ(25px);
+  background: rgba(0,0,0,.18);
+  border: 1px solid rgba(255,255,255,.14);
+  padding: 6px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  opacity:.9;
+}
+
+/* Back = revealed surprise */
+.playBack{
+  transform: rotateY(180deg);
+  background: rgba(255,255,255,.08);
+  backdrop-filter: blur(10px);
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding: 14px 14px;
+}
+.playBackTitle{
+  font-weight: 900;
+  color: rgba(255,255,255,.95);
+  margin-bottom: 8px;
+  font-size: 14px;
+  opacity:.95;
+}
+.playBackText{
+  font-size: 14px;
+  line-height: 1.45;
+  color: rgba(255,255,255,.85);
+  white-space: pre-line;
+}
+
+/* After 3 opens message */
+.finalNote{
+  grid-column: 1 / -1;
+  text-align:center;
+  font-size: 13px;
+  opacity: .9;
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: rgba(255,77,166,.10);
+  border: 1px solid rgba(255,77,166,.20);
+  transform: translateZ(60px);
+}
+
+/* Make cards a little shorter on small screens */
+@media(max-width:700px){
+  .playCard{ height: 140px; }
+}
+@media(max-width:480px){
+  .playCard{ height: 132px; }
+}
+
+/* --- Smaller surprise section for better text visibility --- */
+.card.compact{
+  padding: 14px 14px 12px !important;
+}
+
+.card.compact h1{
+  font-size: clamp(20px, 3.8vw, 30px) !important;
+  margin-bottom: 6px !important;
+}
+
+.card.compact p{
+  font-size: clamp(15px, 2.5vw, 17px) !important;
+  line-height: 1.4 !important;
+}
+
+/* Reduce playing card size */
+.playCard{
+  height: 120px !important;
+}
+
+.playFront::after{
+  inset:8px !important;
+}
+
+.centerIcon{
+  font-size: 32px !important;
+}
+
+.ribbon{
+  font-size: 10px !important;
+  padding: 4px 8px !important;
+}
+
+.playBack{
+  padding: 10px 10px !important;
+}
+
+.playBackTitle{
+  font-size: 12px !important;
+}
+
+.playBackText{
+  font-size: 12px !important;
+}
+
+/* Slightly tighter grid spacing */
+.surpriseWrap{
+  gap: 12px !important;
+  margin-top: 10px !important;
+}
+</style>
+</head>
+<body>
+<div class="bgGlow"></div>
+<div class="stage">
+<div class="card" id="card" title="Click to continue">
+<div class="shine" id="shine"></div>
+<div class="badgeHeart"><span>💖</span></div>
+<h1 id="title">Hey Babe ❤️</h1>
+<p id="text">Click anywhere...</p>
+<div class="hint" id="hint">✨ Click to continue</div>
+<div class="footer" id="footer">Sabin ❤️ Babe</div>
+</div>
+</div>
+<script>
+  const titleEl = document.getElementById("title");
+  const textEl  = document.getElementById("text");
+  const hintEl  = document.getElementById("hint");
+  const card    = document.getElementById("card");
+  const shine   = document.getElementById("shine");
+
+  // Narrative steps (click-to-advance)
+  const story = [
+    {t:"Hey Babe ❤️", p:"I want to say something from my heart."},
+    {t:"", p:"Since you came into my life...\neverything feels brighter."},
+    {t:"", p:"Like my heart upgraded to premium version.\nNo ads. No bugs. Just you."},
+    {t:"", p:"And I want to be honest too."},
+    {t:"", p:"I know sometimes I have anger issues."},
+    {t:"", p:"I know there are things about me you don’t like."},
+    {t:"", p:"But I promise I’ll work on myself.\nTo grow. To change.\nFor you. For us."},
+    {t:"", p:"Because you matter that much to me."},
+    {t:"Babe…", p:"Will you be my Valentine? ❤️", mode:"ASK1"}
+  ];
+
+  // State
+  let idx = 0;
+  let mode = "STORY"; // STORY, ASK1, ASK2, ASK3, YES1, SURPRISES, BONUS_WAIT, BONUS, DONE
+  let noCount = 0;
+
+  // Reveal controls
+  const MAX_OPENS = 3;
+  const BONUS_MAX_OPENS = 1;
+  let opensUsed = 0;
+  function currentLimit(){ return mode === 'BONUS' ? BONUS_MAX_OPENS : MAX_OPENS; }
+  const openedSet = new Set();
+  const openedTexts = [];
+  const openedIsMystery = [];
+
+  // Surprises (3 real + 6 mystery)
+  const surprisesMaster = [
+    // 3 REAL surprises (hidden randomly among 9 cards)
+    {name:"Couple Challenge", text:"Couple Challenge Game 🎮❤️\n(Fun dares, cute questions, and maybe one spicy round if you're brave 😏)", isMystery:false},
+    {name:"Yes Day Pass", text:"YES DAY PASS 🟢💳\n(For one full day, whatever you say… I say YES. No arguments. No negotiations.)", isMystery:false},
+    {name:"One Wish Card", text:"One Wish Card 🌠\n(You can use this anytime. One wish. No questions asked. No limits.)", isMystery:false},
+
+    // 6 Mystery placeholders (no details on first pack)
+    {name:"Mystery", text:"Mystery Surprise 😶‍🌫️\n(You’ll find out later 😉)", isMystery:true},
+    {name:"Mystery", text:"Mystery Surprise ✨\n(Secret surprise locked 🔒)", isMystery:true},
+    {name:"Mystery", text:"Mystery Surprise 🎁\n(Keep it a mystery for now 😌)", isMystery:true},
+    {name:"Mystery", text:"Mystery Surprise 🌙\n(Clue: it happens at night…)", isMystery:true},
+    {name:"Mystery", text:"Mystery Surprise 🍓\n(Clue: sweet + cute vibes)", isMystery:true},
+    {name:"Mystery", text:"Mystery Surprise 🎟️\n(Clue: this one feels VIP)", isMystery:true}
+  ];
+
+  // BONUS surprises (unlocked only if all 3 were mystery)
+    const bonusMaster = [{text:"Trip to somewhere for 1 day 🧳✨\n(Surprise destination — you just pack cute outfits.)"},
+    {text:"Golden Ticket Upgrade 🎟️👑\n(Any date becomes VIP version. Premium treatment unlocked.)"},
+    {text:"$250 Gift Reward 🎁💵\n(Shopping / spa / tech — your choice.)"},
+    {text:"Deep Night Talk 🌙🫶\n(Phones away. Just us. Real connection.)"},
+    {text:"Date to your favorite place 💖📍\n(You pick the place. I plan the vibe.)"},
+    {text:"Sweet treat date 🍰☕\n(Your favorite dessert + coffee/boba.)"},
+    {text:"Golden photo moment 📸✨\n(I’ll be your photographer for the day.)"},
+    {text:"Little surprise gift 🧸💝\n(Small… but meaningful.)"},
+    {text:"Exclusive Surprise Reward ✨💝\n(Special bonus just for you.)"},];
+
+  function setContent(t, p){
+    titleEl.textContent = t || "";
+    titleEl.style.display = t ? "block" : "none";
+    textEl.textContent = p || "";
+  }
+
+  function setHint(text){
+    hintEl.textContent = text || "";
+    hintEl.style.display = text ? "block" : "none";
+  }
+
+  function makeHearts(n=6){
+    const emojis = ["💖","💘","❤️","💞","💕","💓"];
+    for(let i=0;i<n;i++){
+      const h = document.createElement("div");
+      h.className = "heart";
+      h.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+      h.style.setProperty("--dx", (Math.random()*360 - 180) + "px");
+      h.style.left = (50 + (Math.random()*30 - 15)) + "%";
+      h.style.top  = (62 + (Math.random()*14 - 7)) + "%";
+      h.style.fontSize = (18 + Math.random()*18) + "px";
+      document.body.appendChild(h);
+      requestAnimationFrame(()=> h.style.opacity = 1);
+      setTimeout(()=> h.remove(), 2200);
+    }
+  }
+
+  function clearButtons(){
+    const old = document.getElementById("btnRow");
+    if(old) old.remove();
+  }
+
+  function showButtons(config){
+    clearButtons();
+    const row = document.createElement("div");
+    row.className = "btnRow";
+    row.id = "btnRow";
+
+    config.forEach(btn => {
+      const b = document.createElement("button");
+      b.textContent = btn.label;
+      b.className = btn.kind + (btn.small ? " small" : "");
+      b.addEventListener("click", (e)=>{
+        e.stopPropagation();
+        btn.onClick();
+      });
+      row.appendChild(b);
+    });
+
+    card.appendChild(row);
+  }
+
+  function showAsk1(){
+    mode = "ASK1";
+    setHint("");
+    showButtons([
+      {label:"YES ❤️", kind:"yes", onClick: yesFirst},
+      {label:"NO 🙈", kind:"no",  onClick: noFirst}
+    ]);
+  }
+
+  function noFirst(){
+    noCount = 1;
+    mode = "ASK2";
+    setContent("Are you sure? 🥺","Maybe your finger slipped...\n\nOkay okay—one more time.");
+    setHint("");
+    showButtons([
+      {label:"YES ❤️ (okay fine)", kind:"yes", small:true, onClick: yesFirst},
+      {label:"NO 🙈 (still no)", kind:"no",  small:true, onClick: noSecond}
+    ]);
+  }
+
+  function noSecond(){
+    noCount = 2;
+    mode = "ASK3";
+    setContent("Final Level Activated 😂","Loading romance.exe...\nLoading dramatic music.mp3...\n\nLAST chance...\nWill you be my Valentine?");
+    setHint("");
+    showButtons([
+      {label:"YES ❤️", kind:"yes", onClick: yesFirst},
+      {label:"NO 🙈", kind:"no",  onClick: noFinal}
+    ]);
+  }
+
+  function noFinal(){
+    mode = "DONE";
+    clearButtons();
+    card.classList.remove("compact");
+    makeHearts(16);
+    setContent("✨ SYSTEM OVERRIDE ✨",
+      "Whether you say yes shyly or loudly...\nMy heart already chose you.\n\nBabe, you are my Valentine. ❤️\n\n(come here before I start writing poetry too 🤣)");
+    setHint("💖 Tap anywhere to replay");
+  }
+
+  // YES -> click again -> surprises
+  function yesFirst(){
+    mode = "YES1";
+    clearButtons();
+    card.classList.remove("compact");
+    makeHearts(18);
+    setContent("YESSSS 😭❤️",
+      "Babe… you just made me so, so happy.\n\n" +
+      "I’m not even joking — my heart feels full right now.\n" +
+      "Thank you for choosing me.\n\n" +
+      "I promise I’ll keep growing, keep learning, and keep showing you love\n" +
+      "in the small ways and the big ways.\n\n" +
+      "Click again for more surprises 😌🎁");
+    setHint("✨ Click to continue");
+  }
+
+  function clearSurprises(){
+    const old = document.getElementById("surpriseWrap");
+    if(old) old.remove();
+  }
+
+  function shuffle(arr){
+    for(let i = arr.length - 1; i > 0; i--){
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  function buildCardGrid(items, headingText){
+    clearButtons();
+    clearSurprises();
+    card.classList.add("compact"); // keep smaller mode
+
+    const itemsShuffled = shuffle([...items]);
+
+    const wrap = document.createElement("div");
+    wrap.className = "surpriseWrap";
+    wrap.id = "surpriseWrap";
+
+    const note = document.createElement("div");
+    note.className = "playGridNote";
+    note.textContent = headingText;
+    wrap.appendChild(note);
+
+    itemsShuffled.forEach((s, i) => {
+      const pc = document.createElement("div");
+      pc.className = "playCard";
+      pc.dataset.idx = String(i);
+      pc.dataset.text = s.text;
+      pc.dataset.mystery = String(!!s.isMystery);
+
+      const inner = document.createElement("div");
+      inner.className = "playCardInner";
+
+      const front = document.createElement("div");
+      front.className = "playFront";
+
+      const c1 = document.createElement("div");
+      c1.className = "corner top";
+      c1.textContent = "S ♥";
+
+      const c2 = document.createElement("div");
+      c2.className = "corner bot";
+      c2.textContent = "S ♥";
+
+      const icon = document.createElement("div");
+      icon.className = "centerIcon";
+      icon.textContent = (i % 3 === 0) ? "♛" : (i % 3 === 1) ? "♕" : "🃏";
+
+      const rib = document.createElement("div");
+      rib.className = "ribbon";
+      rib.textContent = `Card ${i+1}`;
+
+      front.appendChild(c1);
+      front.appendChild(c2);
+      front.appendChild(icon);
+      front.appendChild(rib);
+
+      const back = document.createElement("div");
+      back.className = "playBack";
+      back.innerHTML = `
+        <div class="playBackTitle">🎁 Revealed</div>
+        <div class="playBackText"></div>
+      `;
+      back.querySelector(".playBackText").textContent = s.text;
+
+      inner.appendChild(front);
+      inner.appendChild(back);
+      pc.appendChild(inner);
+
+      // Click anywhere on the card to open
+      pc.addEventListener("click", (e)=>{
+        e.stopPropagation();
+        if(mode === "SURPRISES" || mode === "BONUS") toggleCard(pc);
+      });
+
+      wrap.appendChild(pc);
+    });
+
+    const counter = document.createElement("div");
+    counter.className = "tinyNote";
+    counter.id = "limitNote";
+    counter.textContent = `Reveals used: ${opensUsed}/${currentLimit()}`;
+    wrap.appendChild(counter);
+
+    card.appendChild(wrap);
+  }
+
+  function buildSurprises(){
+    mode = "SURPRISES";
+    setContent("More Surprises 🎁","There are 9 cards. Only 3 are real surprises — the rest are Mystery cards 😏\n\nPick ANY 3 cards to reveal. After 3 reveals, the rest will lock.");
+    buildCardGrid(surprisesMaster, "🎴 9 cards — only 3 are real surprises. Pick any 3!");
+    setHint("💖 After 3 reveals, the rest will lock. Tap anywhere to replay.");
+  }
+
+  function buildBonus(){
+    mode = "BONUS";
+    // reset reveal counter for bonus set
+    opensUsed = 0;
+    openedSet.clear();
+    openedTexts.length = 0;
+    openedIsMystery.length = 0;
+
+    setContent("BONUS SURPRISES 😳🎁",
+      "Okay… you got ALL mystery cards.\nSo you unlocked a bigger surprise pack.\n\nPick 1 of them 😌");
+    // bonus items don't need mystery flag
+    const bonusItems = bonusMaster.map(x => ({text:x.text, isMystery:false}));
+    buildCardGrid(bonusItems, "✨ BONUS PACK — 9 real rewards inside. Pick any 3!");
+    setHint("🔥 Bonus unlocked! Pick 1 card, then screenshot.");
+  }
+
+  function lockRemaining(){
+    document.querySelectorAll(".playCard").forEach(pc => {
+      const idx = pc.dataset.idx;
+      if(!openedSet.has(idx) && !pc.classList.contains("open")){
+        pc.classList.add("locked");
+      }
+    });
+
+    const note = document.getElementById("limitNote");
+    if(note) note.textContent = `Reveals used: ${opensUsed}/${currentLimit()} — limit reached 😌`;
+
+    // If we're on the first surprise pack and all 3 were mystery, unlock bonus
+    if(mode === "SURPRISES"){
+      const mysteryCount = openedIsMystery.filter(Boolean).length;
+      if(mysteryCount === MAX_OPENS){
+        mode = "BONUS_WAIT";
+        showBonusUnlockMessage();
+        return;
+      }
+    }
+
+    showFinalMessage();
+  }
+
+  function showBonusUnlockMessage(){
+    const wrap = document.getElementById("surpriseWrap");
+    if(!wrap) return;
+
+    const existing = document.getElementById("finalNote");
+    if(existing) existing.remove();
+
+    const msg = document.createElement("div");
+    msg.className = "finalNote";
+    msg.id = "finalNote";
+
+    msg.textContent =
+      "😳 ALL 3 were mystery!\nClick again for more surprises…";
+
+    wrap.appendChild(msg);
+    setHint("✨ Click the big card area again to unlock BONUS");
+  }
+
+  function showFinalMessage(){
+    const wrap = document.getElementById("surpriseWrap");
+    if(!wrap) return;
+
+    const existing = document.getElementById("finalNote");
+    if(existing) existing.remove();
+
+    const msg = document.createElement("div");
+    msg.className = "finalNote";
+    msg.id = "finalNote";
+
+    const list = openedTexts.length
+      ? openedTexts.map((t, i)=> `${i+1}) ${t.split("\n")[0]}`).join("\n")
+      : "";
+
+    msg.textContent =
+      "✅ Limit used!\nNow take a screenshot OR tell me what gifts you got.\n\n" +
+      (list ? ("You revealed:\n" + list) : "");
+
+    wrap.appendChild(msg);
+  }
+
+  function toggleCard(pc){
+    const idx = pc.dataset.idx;
+    const isOpen = pc.classList.contains("open");
+
+    if(pc.classList.contains("locked") && !isOpen) return;
+
+    if(isOpen){ return; }
+
+    if(!openedSet.has(idx)){
+      if(opensUsed >= currentLimit()){
+        lockRemaining();
+        return;
+      }
+      openedSet.add(idx);
+      opensUsed++;
+
+      const txt = pc.dataset.text || "";
+      openedTexts.push(txt);
+      openedIsMystery.push(pc.dataset.mystery === "true");
+
+      const note = document.getElementById("limitNote");
+      if(note) note.textContent = `Reveals used: ${opensUsed}/${currentLimit()}`;
+    }
+
+    pc.classList.add("open");
+    makeHearts(4);
+
+    if(opensUsed >= currentLimit()){
+      lockRemaining();
+    }
+  }
+
+  function resetAll(){
+    idx = 0;
+    mode = "STORY";
+    noCount = 0;
+    opensUsed = 0;
+    openedSet.clear();
+    openedTexts.length = 0;
+    openedIsMystery.length = 0;
+    clearButtons();
+    clearSurprises();
+    card.classList.remove("compact");
+    setContent(story[0].t, story[0].p);
+    setHint("✨ Click to continue");
+  }
+
+  // Click handler
+  card.addEventListener("click", ()=>{
+    if(mode === "STORY"){
+      idx++;
+      if(idx >= story.length) idx = story.length-1;
+
+      const s = story[idx];
+      setContent(s.t, s.p);
+      setHint(s.mode ? "" : "✨ Click to continue");
+
+      if(s.mode === "ASK1") showAsk1();
+      else makeHearts(3);
+
+    } else if(mode === "YES1"){
+      buildSurprises();
+
+    } else if(mode === "BONUS_WAIT"){
+      buildBonus();
+
+    } else if(mode === "SURPRISES" || mode === "BONUS" || mode === "DONE"){
+      resetAll();
+    }
+  });
+
+  // 3D tilt (mouse + touch) — kept
+  function tiltFromPoint(x, y){
+    const r = card.getBoundingClientRect();
+    const mx = (x - r.left) / r.width;
+    const my = (y - r.top) / r.height;
+
+    shine.style.setProperty("--mx", (mx*100).toFixed(1) + "%");
+    shine.style.setProperty("--my", (my*100).toFixed(1) + "%");
+
+    const rotY = (mx - 0.5) * 14;
+    const rotX = -(my - 0.5) * 12;
+    card.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg) translateZ(0)`;
+  }
+
+  function resetTilt(){
+    card.style.transform = "rotateX(0deg) rotateY(0deg)";
+    shine.style.setProperty("--mx", "50%");
+    shine.style.setProperty("--my", "30%");
+  }
+
+  window.addEventListener("mousemove", (e)=> tiltFromPoint(e.clientX, e.clientY));
+  window.addEventListener("mouseleave", resetTilt);
+
+  window.addEventListener("touchmove", (e)=>{
+    if(!e.touches || !e.touches[0]) return;
+    tiltFromPoint(e.touches[0].clientX, e.touches[0].clientY);
+  }, {passive:true});
+  window.addEventListener("touchend", resetTilt);
+
+  // Init
+  setContent(story[0].t, story[0].p);
+</script>
+</body>
+</html>
